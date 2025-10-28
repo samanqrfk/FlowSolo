@@ -8,7 +8,7 @@ public class FlowSoloEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 
-		DefaultBuildSettings = BuildSettingsVersion.V5;
+		DefaultBuildSettings = BuildSettingsVersion.V4;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
 		NativePointerMemberBehaviorOverride = PointerMemberBehavior.Disallow;
 		

@@ -1,4 +1,4 @@
 [submodule "Plugins/FlowGraph"]
 	path = Plugins/FlowGraph
 	url = https://github.com/samanqrfk/FlowGraph
-	branch = v2.1-5.6
+	branch = v2.1-5.3
