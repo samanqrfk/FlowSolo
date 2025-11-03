@@ -10,7 +10,8 @@ public class FlowSolo : ModuleRules
 		PublicDependencyModuleNames.AddRange(new[]
 		{
 			"Flow",
-			"FlowQuest"
+			"FlowQuest",
+			"GameplayTags"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new[]
