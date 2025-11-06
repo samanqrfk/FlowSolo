@@ -72,13 +72,6 @@ UFlowNode_Not::UFlowNode_Not() : A(false), Out(true)
 #endif
 }
 
-
-void UFlowNode_MathOperator::ExecuteInput(const FName& PinName)
-{
-	TriggerFirstOutput(true);
-}
-
-
 void UFlowNode_ArithmeticOperatorFloat::CachePinProperties()
 {
 	Super::CachePinProperties();

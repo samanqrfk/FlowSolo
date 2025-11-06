@@ -18,7 +18,6 @@ public:
 
 	virtual bool PerformPureCalculation_Implementation() override { PerformOp(); return true; }
 	virtual bool IsPureNode_Implementation() const override { return true; }
-	virtual void ExecuteInput(const FName& PinName) override;
 
 protected:
 	virtual void PerformOp() PURE_VIRTUAL(UFlowNode_ArithmeticOperatorFloat::PerformOp);
