@@ -6,28 +6,10 @@
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(FlowNode_Math)
 
-UFlowNode_ArithmeticOperator::UFlowNode_ArithmeticOperator()
+UFlowNode_MathOperator::UFlowNode_MathOperator()
 {
 #if WITH_EDITOR
-	Category = TEXT("Math|Arithmetic");
-#endif
-	InputPins.Empty();
-	OutputPins.Empty();
-	AllowedSignalModes = { EFlowSignalMode::Enabled, EFlowSignalMode::Disabled };
-}
-UFlowNode_ComparisonOperator::UFlowNode_ComparisonOperator()
-{
-#if WITH_EDITOR
-	Category = TEXT("Math|Comparison");
-#endif
-	InputPins.Empty();
-	OutputPins.Empty();
-	AllowedSignalModes = { EFlowSignalMode::Enabled, EFlowSignalMode::Disabled };
-}
-UFlowNode_LogicalOperator::UFlowNode_LogicalOperator()
-{
-#if WITH_EDITOR
-	Category = TEXT("Math|Logic");
+	Category = TEXT("Math");
 #endif
 	InputPins.Empty();
 	OutputPins.Empty();
@@ -38,10 +20,16 @@ UFlowNode_LogicalOperator::UFlowNode_LogicalOperator()
 UFlowNode_ArithmeticOperatorFloat::UFlowNode_ArithmeticOperatorFloat()
 	: A(0.0f), B(0.0f), Out(0.0f)
 {
+#if WITH_EDITOR
+	Category += TEXT("|Arithmetic");
+#endif
 }
 UFlowNode_ArithmeticOperatorInt::UFlowNode_ArithmeticOperatorInt()
 	: A(0), B(0), Out(0)
 {
+#if WITH_EDITOR
+	Category += TEXT("|Arithmetic");
+#endif
 }
 
 
@@ -58,30 +46,34 @@ UFlowNode_DivInt::UFlowNode_DivInt()
 UFlowNode_ComparisonOperatorFloat::UFlowNode_ComparisonOperatorFloat()
 	: A(0.0f), B(0.0f), Out(false)
 {
+#if WITH_EDITOR
+	Category += TEXT("|Comparison");
+#endif
 }
 UFlowNode_ComparisonOperatorInt::UFlowNode_ComparisonOperatorInt()
 	: A(0), B(0), Out(false)
 {
+#if WITH_EDITOR
+	Category += TEXT("|Comparison");
+#endif
 }
 
 
 UFlowNode_LogicalOperator_Binary::UFlowNode_LogicalOperator_Binary() : A(false), B(false), Out(false)
 {
+#if WITH_EDITOR
+	Category += TEXT("|Logic");
+#endif
 }
 UFlowNode_Not::UFlowNode_Not() : A(false), Out(true)
 {
+#if WITH_EDITOR
+	Category += TEXT("|Logic");
+#endif
 }
 
 
-void UFlowNode_ArithmeticOperator::ExecuteInput(const FName& PinName)
-{
-	TriggerFirstOutput(true);
-}
-void UFlowNode_ComparisonOperator::ExecuteInput(const FName& PinName)
-{
-	TriggerFirstOutput(true);
-}
-void UFlowNode_LogicalOperator::ExecuteInput(const FName& PinName)
+void UFlowNode_MathOperator::ExecuteInput(const FName& PinName)
 {
 	TriggerFirstOutput(true);
 }
@@ -101,7 +93,6 @@ void UFlowNode_ArithmeticOperatorInt::CachePinProperties()
 	DECLARE_INPUT_PIN(B);
 	DECLARE_OUTPUT_PIN(Out);
 }
-
 void UFlowNode_ComparisonOperatorFloat::CachePinProperties()
 {
 	Super::CachePinProperties();
@@ -129,94 +120,6 @@ void UFlowNode_Not::CachePinProperties()
 	DECLARE_INPUT_PIN(A);
 	DECLARE_OUTPUT_PIN(Out);
 }
-
-
-bool UFlowNode_ArithmeticOperatorFloat::EvaluateAndGetOutputValue(const FName OutputPinName, FProperty*& OutProperty, const void*& OutDataPtr)
-{
-	// 1. Check if the pin being requested is our "Out" pin.
-	// 2. When this is called, the Flow framework has already populated A and B
-	//    by evaluating their input connections (if any).
-	// 3. We just call the virtual PerformOp to get the result.
-
-	if (OutputPinName == GET_MEMBER_NAME_CHECKED(UFlowNode_ArithmeticOperatorFloat, Out))
-	{
-		Out = PerformOp(A, B);
-
-		// Set the output pointers for the Flow framework
-		OutProperty = GetOutputProperty(OutputPinName);
-		OutDataPtr = OutProperty->ContainerPtrToValuePtr<void>(this);
-		return true;
-	}
-
-	return false;
-}
-
-bool UFlowNode_ArithmeticOperatorInt::EvaluateAndGetOutputValue(const FName OutputPinName, FProperty*& OutProperty, const void*& OutDataPtr)
-{
-	if (OutputPinName == GET_MEMBER_NAME_CHECKED(UFlowNode_ArithmeticOperatorInt, Out))
-	{
-		Out = PerformOp(A, B);
-
-		OutProperty = GetOutputProperty(OutputPinName);
-		OutDataPtr = OutProperty->ContainerPtrToValuePtr<void>(this);
-		return true;
-	}
-
-	return false;
-}
-
-bool UFlowNode_ComparisonOperatorFloat::EvaluateAndGetOutputValue(const FName OutputPinName, FProperty*& OutProperty, const void*& OutDataPtr)
-{
-	if (OutputPinName == GET_MEMBER_NAME_CHECKED(UFlowNode_ComparisonOperatorFloat, Out))
-	{
-		Out = PerformOp(A, B);
-
-		OutProperty = GetOutputProperty(OutputPinName);
-		OutDataPtr = OutProperty->ContainerPtrToValuePtr<void>(this);
-		return true;
-	}
-	return false;
-}
-
-bool UFlowNode_ComparisonOperatorInt::EvaluateAndGetOutputValue(const FName OutputPinName, FProperty*& OutProperty, const void*& OutDataPtr)
-{
-	if (OutputPinName == GET_MEMBER_NAME_CHECKED(UFlowNode_ComparisonOperatorInt, Out))
-	{
-		Out = PerformOp(A, B);
-
-		OutProperty = GetOutputProperty(OutputPinName);
-		OutDataPtr = OutProperty->ContainerPtrToValuePtr<void>(this);
-		return true;
-	}
-	return false;
-}
-
-bool UFlowNode_LogicalOperator_Binary::EvaluateAndGetOutputValue(const FName OutputPinName, FProperty*& OutProperty, const void*& OutDataPtr)
-{
-	if (OutputPinName == GET_MEMBER_NAME_CHECKED(UFlowNode_LogicalOperator_Binary, Out))
-	{
-		Out = PerformOp(A, B);
-
-		OutProperty = GetOutputProperty(OutputPinName);
-		OutDataPtr = OutProperty->ContainerPtrToValuePtr<void>(this);
-		return true;
-	}
-	return false;
-}
-
-bool UFlowNode_Not::EvaluateAndGetOutputValue(const FName OutputPinName, FProperty*& OutProperty, const void*& OutDataPtr)
-{
-	if (OutputPinName == GET_MEMBER_NAME_CHECKED(UFlowNode_Not, Out))
-	{
-		Out = !A;
-
-		OutProperty = GetOutputProperty(OutputPinName);
-		OutDataPtr = OutProperty->ContainerPtrToValuePtr<void>(this);
-		return true;
-	}
-	return false;
-}
-
 
 UFlowNode_If::UFlowNode_If() : Condition(false)
 {
